@@ -6,37 +6,43 @@
     <img
       :src="product.imageUrl"
       :alt="product.name"
-      class="product-image"
+      class="image"
     />
 
-    <!-- Información -->
-    <h3>{{ product.name }}</h3>
+    <!-- CONTENIDO -->
+    <div class="content">
 
-    <p class="description">
-      {{ shortDescription }}
-    </p>
+      <h3 class="title">
+        {{ product.name }}
+      </h3>
 
-    <p class="price">
-      ${{ product.price }}
-    </p>
+      <p class="description">
+        {{ shortDescription }}
+      </p>
 
-    <p class="stock">
-      Stock: {{ product.stock }}
-    </p>
+      <p class="price">
+        ${{ product.price }}
+      </p>
 
-    <!-- Botones -->
-    <div class="actions">
+      <p class="stock">
+        Stock: {{ product.stock }}
+      </p>
 
-      <button @click="handleAddToCart">
-        Añadir
-      </button>
+      <!-- BOTONES -->
+      <div class="actions">
 
-      <router-link
-        :to="`/product/${product.id}`"
-        class="detail-link"
-      >
-        Ver detalle
-      </router-link>
+        <button @click="handleAddToCart">
+          Añadir
+        </button>
+
+        <router-link
+          :to="`/product/${product.id}`"
+          class="details-btn"
+        >
+          Ver detalle
+        </router-link>
+
+      </div>
 
     </div>
 
@@ -105,91 +111,185 @@ const handleAddToCart = () => {
 
   background: white;
 
-  border-radius: 12px;
+  border-radius: 18px;
 
-  padding: 1rem;
+  overflow: hidden;
 
   box-shadow:
-    0 2px 8px rgba(0,0,0,.1);
+    0 4px 12px rgba(0,0,0,.05);
+
+  transition: all .3s ease;
+
+  width: 280px;
 
   display: flex;
+
   flex-direction: column;
-
-  gap: .8rem;
-
-  transition: .2s;
 }
 
 .card:hover {
 
-  transform: translateY(-3px);
+  transform: translateY(-8px);
+
+  box-shadow:
+    0 15px 30px rgba(0,0,0,.12);
 }
 
-.product-image {
+/* ====================
+   IMAGE
+==================== */
+
+.image {
 
   width: 100%;
+
   height: 220px;
 
   object-fit: cover;
 
-  border-radius: 8px;
+  background: #f3f4f6;
+}
+
+/* ====================
+   CONTENT
+==================== */
+
+.content {
+
+  padding: 1.3rem;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: .9rem;
+
+  flex: 1;
+}
+
+.title {
+
+  font-size: 1.15rem;
+
+  font-weight: 700;
+
+  color: #111;
+
+  line-height: 1.3;
 }
 
 .description {
 
   color: #666;
 
-  min-height: 50px;
+  font-size: .95rem;
+
+  line-height: 1.5;
+
+  min-height: 45px;
 }
 
 .price {
 
-  font-size: 1.2rem;
-  font-weight: bold;
+  font-size: 1.5rem;
+
+  font-weight: 700;
+
+  color: var(--primary);
 }
 
 .stock {
 
-  color: #555;
+  color: #666;
+
+  font-size: .95rem;
 }
+
+/* ====================
+   ACTIONS
+==================== */
 
 .actions {
 
   display: flex;
 
-  gap: .5rem;
+  gap: .8rem;
 
   margin-top: auto;
 }
 
-button {
+/* ====================
+   BUTTONS
+==================== */
+
+button,
+.details-btn {
 
   flex: 1;
 
-  padding: .7rem;
+  height: 46px;
 
   border: none;
 
-  background: #222;
-
-  color: white;
-
-  border-radius: 6px;
+  border-radius: 12px;
 
   cursor: pointer;
+
+  font-weight: 600;
+
+  font-size: .95rem;
+
+  transition: all .3s ease;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
 }
 
-.detail-link {
+/* ADD BUTTON */
 
-  flex: 1;
+button {
 
-  text-align: center;
+  background: var(--primary);
 
-  padding: .7rem;
-
-  background: #eee;
-
-  border-radius: 6px;
+  color: white;
 }
 
+button:hover {
+
+  background: var(--primary-dark);
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 18px rgba(16,185,129,.25);
+}
+
+button:active {
+
+  transform: scale(.96);
+}
+
+/* DETAILS BUTTON */
+
+.details-btn {
+
+  background: #f3f4f6;
+
+  color: #111;
+}
+
+.details-btn:hover {
+
+  background: #e5e7eb;
+
+  transform: translateY(-2px);
+}
+
+.details-btn:active {
+
+  transform: scale(.96);
+}
 </style>

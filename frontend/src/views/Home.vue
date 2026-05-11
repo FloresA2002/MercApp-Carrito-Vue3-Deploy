@@ -184,29 +184,24 @@ const addToCart = (product) => {
 <style scoped>
 
 .title {
-  margin-bottom: 1.5rem;
+
+  font-size: 2.4rem;
+
+  margin-bottom: 2rem;
+
+  font-weight: 700;
 }
 
 .filters {
 
-  display: flex;
+  display: grid;
+
+  grid-template-columns:
+    1fr 250px;
+
   gap: 1rem;
 
   margin-bottom: 2rem;
-
-  flex-wrap: wrap;
-}
-
-input,
-select {
-
-  padding: .8rem;
-
-  border: 1px solid #ccc;
-
-  border-radius: 8px;
-
-  flex: 1;
 }
 
 .products-grid {
@@ -214,35 +209,63 @@ select {
   display: grid;
 
   grid-template-columns:
-    repeat(auto-fit, minmax(250px, 1fr));
+    repeat(auto-fill, 280px);
 
-  gap: 1.5rem;
+  gap: 2rem;
+
+  justify-content: center;
 }
 
 .message {
 
-  padding: 2rem;
+  padding: 3rem;
 
   text-align: center;
+
+  color: var(--text-light);
 }
 
 .error {
 
-  color: red;
+  color: crimson;
 }
+
 .new-product-btn {
 
-  display: inline-block;
+  display: inline-flex;
 
-  margin-bottom: 1.5rem;
+  align-items: center;
 
-  padding: .8rem 1.2rem;
+  justify-content: center;
 
-  background: #222;
+  margin-bottom: 2rem;
+
+  background: var(--primary);
 
   color: white;
 
-  border-radius: 8px;
+  padding: .9rem 1.4rem;
+
+  border-radius: 12px;
+
+  font-weight: 600;
+
+  transition: all .3s ease;
 }
+
+.new-product-btn:hover {
+
+  background: var(--primary-dark);
+
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+
+  .filters {
+    grid-template-columns: 1fr;
+  }
+}
+
 
 </style>

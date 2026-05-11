@@ -4,11 +4,18 @@
 
     <!-- LOGO -->
     <router-link
-      to="/"
-      class="logo"
-    >
-      MercApp
-    </router-link>
+  to="/"
+  class="logo"
+  active-class=""
+>
+
+  <img
+    :src="logo"
+    alt="MercApp Logo"
+    class="logo-image"
+  />
+
+</router-link>
 
     <!-- LINKS -->
     <div class="links">
@@ -36,6 +43,8 @@
 
 <script setup>
 
+import logo from '@/assets/logo.png'
+
 import {
   useCart
 } from '@/composables/useCart'
@@ -52,31 +61,55 @@ const {
 
 <style scoped>
 
+.logo {
+
+  display: flex;
+
+  align-items: center;
+
+  height: 150px;
+}
+
+.logo-image {
+
+  max-height: 100%;
+
+  width: auto;
+
+  object-fit: contain;
+
+  transition: all .3s ease;
+}
+
+.logo-image:hover {
+
+  transform: scale(1.05);
+}
+
 .navbar {
 
   display: flex;
 
   justify-content: space-between;
 
+  height: 80px;
+
   align-items: center;
 
-  padding: 1rem 2rem;
+  padding: 1.2rem 2rem;
 
-  background: #222;
+  background: #111;
 
-  color: white;
+  position: sticky;
+
+  top: 0;
+
+  z-index: 100;
+
+  box-shadow:
+    0 4px 12px rgba(0,0,0,.12);
 }
 
-.logo {
-
-  font-size: 1.4rem;
-
-  font-weight: bold;
-
-  color: white;
-
-  text-decoration: none;
-}
 
 .links {
 
@@ -87,23 +120,44 @@ const {
 
 .links a {
 
-  color: white;
+  color: #d1d5db;
 
-  text-decoration: none;
+  padding: .6rem 1rem;
 
-  transition: .2s;
+  border-radius: 10px;
+
+  transition: all .3s ease;
 }
 
 .links a:hover {
 
-  opacity: .7;
+  background: rgba(255,255,255,.08);
+
+  color: white;
 }
 
 .router-link-active {
 
-  font-weight: bold;
+  background: var(--primary);
 
-  text-decoration: underline;
+  color: white !important;
+}
+
+@media (max-width: 768px) {
+
+  .navbar {
+
+    flex-direction: column;
+
+    gap: 1rem;
+  }
+
+  .links {
+
+    flex-wrap: wrap;
+
+    justify-content: center;
+  }
 }
 
 </style>

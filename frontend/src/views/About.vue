@@ -12,7 +12,13 @@
 
         <div class="spinner"></div>
 
-        <p>Cargando vista...</p>
+        <h2>
+          Cargando ...
+        </h2>
+
+        <p>
+          Preparando experiencia MercApp
+        </p>
 
       </div>
 
@@ -28,7 +34,10 @@ import {
   defineAsyncComponent
 } from 'vue'
 
-// Simulación async REAL
+// ====================
+// ASYNC COMPONENT
+// ====================
+
 const AsyncAboutContent =
   defineAsyncComponent(() =>
 
@@ -49,7 +58,13 @@ const AsyncAboutContent =
 
 <style scoped>
 
+/* ====================
+   LOADER SCREEN
+==================== */
+
 .loader {
+
+  min-height: 70vh;
 
   display: flex;
 
@@ -57,25 +72,66 @@ const AsyncAboutContent =
 
   align-items: center;
 
-  padding: 4rem;
+  justify-content: center;
+
+  gap: 1rem;
+
+  text-align: center;
 }
+
+/* ====================
+   SPINNER
+==================== */
 
 .spinner {
 
-  width: 50px;
-  height: 50px;
+  width: 70px;
 
-  border: 5px solid #ddd;
-  border-top: 5px solid #222;
+  height: 70px;
+
+  border:
+    5px solid rgba(255,255,255,.08);
+
+  border-top:
+    5px solid #10B981;
 
   border-radius: 50%;
 
-  animation: spin 1s linear infinite;
+  animation:
+    spin 1s linear infinite;
+
+  box-shadow:
+    0 0 20px rgba(16,185,129,.15);
 }
+
+/* ====================
+   TEXT
+==================== */
+
+h2 {
+
+  color: #111;
+
+  font-size: 1.8rem;
+
+  font-weight: 700;
+}
+
+p {
+
+  color: #666;
+
+  font-size: 1rem;
+}
+
+/* ====================
+   ANIMATION
+==================== */
 
 @keyframes spin {
 
   to {
+
     transform: rotate(360deg);
   }
 }
