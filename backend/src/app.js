@@ -33,9 +33,13 @@ app.use(
 app.use(express.json())
 
 app.get('/health', (req, res) => {
+  console.log('Endpoint /health llamado')
+
   res.json({
     status: 'ok',
-    service: 'MercApp API'
+    service: 'MercApp API',
+    version: 'deploy-test-001',
+    timestamp: new Date().toISOString()
   })
 })
 
