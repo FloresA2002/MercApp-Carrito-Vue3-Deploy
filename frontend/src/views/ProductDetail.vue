@@ -94,6 +94,8 @@ import {
   useCart
 } from '@/composables/useCart'
 
+import { API_URL } from '@/config/api'
+
 // ====================
 // ROUTE
 // ====================
@@ -145,8 +147,8 @@ const fetchProduct = async () => {
 
     // Producto
     const response = await fetch(
-      `http://localhost:3000/api/products/${route.params.id}`
-    )
+  `${API_URL}/api/products/${route.params.id}`
+)
 
     if (!response.ok) {
 
@@ -160,9 +162,9 @@ const fetchProduct = async () => {
 
     // Categorías
     const categoriesResponse =
-      await fetch(
-        'http://localhost:3000/api/categories'
-      )
+  await fetch(
+    `${API_URL}/api/categories`
+  )
 
     categories.value =
       await categoriesResponse.json()

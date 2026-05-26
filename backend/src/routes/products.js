@@ -1,53 +1,20 @@
-const express = require('express');
-const router = express.Router();
+const express = require('express')
+const mongoose = require('mongoose')
 
-const fs = require('fs');
-const path = require('path');
+const router = express.Router()
 
-const db = require('../data/db');
-
-const productsPath = path.join(
-  __dirname,
-  '../data/products.json'
-);
-
-// Guardar productos en JSON
-const saveProducts = () => {
-  fs.writeFileSync(
-    productsPath,
-    JSON.stringify(db.products, null, 2)
-  );
-};
+const Product = require('../models/Product')
+const Category = require('../models/Category')
 
 // =============================
-// GET ALL PRODUCTS
+// VALIDACIONES
 // =============================
-router.get('/', (req, res) => {
-  res.json(db.products);
-});
 
-// =============================
-// GET PRODUCT BY ID
-// =============================
-router.get('/:id', (req, res) => {
-  const product = db.products.find(
-    p => p.id == req.params.id
-  );
+const isValidObjectId = (id) => {
+  return mongoose.Types.ObjectId.isValid(id)
+}
 
-  if (!product) {
-    return res.status(404).json({
-      error: 'Producto no encontrado'
-    });
-  }
-
-  res.json(product);
-});
-
-// =============================
-// CREATE PRODUCT
-// =============================
-router.post('/', (req, res) => {
-
+const validateProduct = async (body, isPartial = false) => {
   const {
     name,
     description,
@@ -55,191 +22,268 @@ router.post('/', (req, res) => {
     imageUrl,
     categoryId,
     stock
-  } = req.body;
+  } = body
 
-  // Validar campos obligatorios
+  if (!isPartial) {
+    if (
+      !name ||
+      !description ||
+      price === undefined ||
+      !imageUrl ||
+      !categoryId ||
+      stock === undefined
+    ) {
+      return 'Todos los campos son obligatorios'
+    }
+  }
+
+  if (name !== undefined && typeof name !== 'string') {
+    return 'El nombre debe ser texto'
+  }
+
+  if (description !== undefined && typeof description !== 'string') {
+    return 'La descripción debe ser texto'
+  }
+
   if (
-    !name ||
-    !description ||
-    price === undefined ||
-    !imageUrl ||
-    categoryId === undefined ||
-    stock === undefined
+    price !== undefined &&
+    (typeof price !== 'number' || price <= 0)
   ) {
-    return res.status(400).json({
-      error: 'Todos los campos son obligatorios'
-    });
+    return 'Precio inválido'
   }
 
-  // Validar tipos
-  if (typeof name !== 'string') {
-    return res.status(400).json({
-      error: 'El nombre debe ser texto'
-    });
+  if (
+    stock !== undefined &&
+    (typeof stock !== 'number' || stock < 0)
+  ) {
+    return 'Stock inválido'
   }
 
-  if (typeof description !== 'string') {
-    return res.status(400).json({
-      error: 'La descripción debe ser texto'
-    });
+  if (imageUrl !== undefined) {
+    const urlPattern = /^https?:\/\/.+/
+
+    if (!urlPattern.test(imageUrl)) {
+      return 'URL de imagen inválida'
+    }
   }
 
-  if (typeof price !== 'number' || price <= 0) {
-    return res.status(400).json({
-      error: 'Precio inválido'
-    });
+  if (categoryId !== undefined) {
+    if (!isValidObjectId(categoryId)) {
+      return 'Categoría inválida'
+    }
+
+    const categoryExists = await Category.findById(categoryId)
+
+    if (!categoryExists) {
+      return 'La categoría no existe'
+    }
   }
 
-  if (typeof stock !== 'number' || stock < 0) {
-    return res.status(400).json({
-      error: 'Stock inválido'
-    });
+  return null
+}
+
+// =============================
+// GET ALL PRODUCTS
+// =============================
+
+router.get('/', async (req, res) => {
+  try {
+    const products = await Product.find().sort({ createdAt: -1 })
+
+    res.json(products)
+  } catch (error) {
+    console.error(error)
+
+    res.status(500).json({
+      error: 'Error al obtener productos'
+    })
   }
+})
 
-  // Validar URL
-  const urlPattern = /^https?:\/\/.+/;
+// =============================
+// GET PRODUCT BY ID
+// =============================
 
-  if (!urlPattern.test(imageUrl)) {
-    return res.status(400).json({
-      error: 'URL de imagen inválida'
-    });
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params
+
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({
+        error: 'ID inválido'
+      })
+    }
+
+    const product = await Product.findById(id)
+
+    if (!product) {
+      return res.status(404).json({
+        error: 'Producto no encontrado'
+      })
+    }
+
+    res.json(product)
+  } catch (error) {
+    console.error(error)
+
+    res.status(500).json({
+      error: 'Error al obtener producto'
+    })
   }
+})
 
-  // Crear producto
-  const newProduct = {
-    id: Date.now(),
-    name,
-    description,
-    price,
-    imageUrl,
-    categoryId,
-    stock
-  };
+// =============================
+// CREATE PRODUCT
+// =============================
 
-  db.products.push(newProduct);
+router.post('/', async (req, res) => {
+  try {
+    const validationError = await validateProduct(req.body)
 
-  // Guardar cambios
-  saveProducts();
+    if (validationError) {
+      return res.status(400).json({
+        error: validationError
+      })
+    }
 
-  res.status(201).json(newProduct);
-});
+    const product = await Product.create(req.body)
+
+    res.status(201).json(product)
+  } catch (error) {
+    console.error(error)
+
+    res.status(500).json({
+      error: 'Error al crear producto'
+    })
+  }
+})
 
 // =============================
 // UPDATE PRODUCT (PUT)
 // =============================
-router.put('/:id', (req, res) => {
 
-  const index = db.products.findIndex(
-    p => p.id == req.params.id
-  );
+router.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params
 
-  if (index === -1) {
-    return res.status(404).json({
-      error: 'Producto no encontrado'
-    });
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({
+        error: 'ID inválido'
+      })
+    }
+
+    const validationError = await validateProduct(req.body)
+
+    if (validationError) {
+      return res.status(400).json({
+        error: validationError
+      })
+    }
+
+    const product = await Product.findByIdAndUpdate(
+      id,
+      req.body,
+      {
+        new: true,
+        runValidators: true
+      }
+    )
+
+    if (!product) {
+      return res.status(404).json({
+        error: 'Producto no encontrado'
+      })
+    }
+
+    res.json(product)
+  } catch (error) {
+    console.error(error)
+
+    res.status(500).json({
+      error: 'Error al actualizar producto'
+    })
   }
-
-  // Validaciones opcionales
-  if (
-    req.body.price !== undefined &&
-    (typeof req.body.price !== 'number' ||
-      req.body.price <= 0)
-  ) {
-    return res.status(400).json({
-      error: 'Precio inválido'
-    });
-  }
-
-  if (
-    req.body.stock !== undefined &&
-    (typeof req.body.stock !== 'number' ||
-      req.body.stock < 0)
-  ) {
-    return res.status(400).json({
-      error: 'Stock inválido'
-    });
-  }
-
-  // Actualizar producto
-  db.products[index] = {
-    ...db.products[index],
-    ...req.body
-  };
-
-  // Guardar cambios
-  saveProducts();
-
-  res.json(db.products[index]);
-});
+})
 
 // =============================
 // PARTIAL UPDATE (PATCH)
 // =============================
-router.patch('/:id', (req, res) => {
 
-  const product = db.products.find(
-    p => p.id == req.params.id
-  );
+router.patch('/:id', async (req, res) => {
+  try {
+    const { id } = req.params
 
-  if (!product) {
-    return res.status(404).json({
-      error: 'Producto no encontrado'
-    });
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({
+        error: 'ID inválido'
+      })
+    }
+
+    const validationError = await validateProduct(req.body, true)
+
+    if (validationError) {
+      return res.status(400).json({
+        error: validationError
+      })
+    }
+
+    const product = await Product.findByIdAndUpdate(
+      id,
+      req.body,
+      {
+        new: true,
+        runValidators: true
+      }
+    )
+
+    if (!product) {
+      return res.status(404).json({
+        error: 'Producto no encontrado'
+      })
+    }
+
+    res.json(product)
+  } catch (error) {
+    console.error(error)
+
+    res.status(500).json({
+      error: 'Error al actualizar producto'
+    })
   }
-
-  // Validaciones
-  if (
-    req.body.price !== undefined &&
-    (typeof req.body.price !== 'number' ||
-      req.body.price <= 0)
-  ) {
-    return res.status(400).json({
-      error: 'Precio inválido'
-    });
-  }
-
-  if (
-    req.body.stock !== undefined &&
-    (typeof req.body.stock !== 'number' ||
-      req.body.stock < 0)
-  ) {
-    return res.status(400).json({
-      error: 'Stock inválido'
-    });
-  }
-
-  // Actualizar parcialmente
-  Object.assign(product, req.body);
-
-  // Guardar cambios
-  saveProducts();
-
-  res.json(product);
-});
+})
 
 // =============================
 // DELETE PRODUCT
 // =============================
-router.delete('/:id', (req, res) => {
 
-  const index = db.products.findIndex(
-    p => p.id == req.params.id
-  );
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params
 
-  if (index === -1) {
-    return res.status(404).json({
-      error: 'Producto no encontrado'
-    });
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({
+        error: 'ID inválido'
+      })
+    }
+
+    const product = await Product.findByIdAndDelete(id)
+
+    if (!product) {
+      return res.status(404).json({
+        error: 'Producto no encontrado'
+      })
+    }
+
+    res.json({
+      message: 'Producto eliminado'
+    })
+  } catch (error) {
+    console.error(error)
+
+    res.status(500).json({
+      error: 'Error al eliminar producto'
+    })
   }
+})
 
-  db.products.splice(index, 1);
-
-  // Guardar cambios
-  saveProducts();
-
-  res.json({
-    message: 'Producto eliminado'
-  });
-});
-
-module.exports = router;
+module.exports = router

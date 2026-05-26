@@ -148,6 +148,8 @@ import {
   useRouter
 } from 'vue-router'
 
+import { API_URL } from '@/config/api'
+
 // ====================
 // ROUTER
 // ====================
@@ -202,8 +204,8 @@ const categories = ref([])
 const fetchCategories = async () => {
 
   const response = await fetch(
-    'http://localhost:3000/api/categories'
-  )
+  `${API_URL}/api/categories`
+)
 
   categories.value =
     await response.json()
@@ -218,8 +220,8 @@ const fetchProduct = async () => {
   if (!isEdit.value) return
 
   const response = await fetch(
-    `http://localhost:3000/api/products/${route.params.id}`
-  )
+  `${API_URL}/api/products/${route.params.id}`
+)
 
   const product =
     await response.json()
@@ -297,9 +299,9 @@ const handleSubmit = async () => {
 
   const url = isEdit.value
 
-    ? `http://localhost:3000/api/products/${route.params.id}`
+    ? `${API_URL}/api/products/${route.params.id}`
 
-    : 'http://localhost:3000/api/products'
+    : `${API_URL}/api/products`
 
   const method = isEdit.value
     ? 'PUT'

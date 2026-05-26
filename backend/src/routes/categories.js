@@ -1,25 +1,25 @@
-const express = require('express');
-const router = express.Router();
+const express = require('express')
 
-const fs = require('fs');
-const path = require('path');
+const router = express.Router()
 
-const db = require('../data/db');
+const Category = require('../models/Category')
 
-const productsPath = path.join(
-  __dirname,
-  '../data/products.json'
-);
+// =============================
+// GET ALL CATEGORIES
+// =============================
 
-const saveProducts = () => {
-  fs.writeFileSync(
-    productsPath,
-    JSON.stringify(db.products, null, 2)
-  );
-};
+router.get('/', async (req, res) => {
+  try {
+    const categories = await Category.find().sort({ name: 1 })
 
-router.get('/', (req, res) => {
-  res.json(db.categories);
-});
+    res.json(categories)
+  } catch (error) {
+    console.error(error)
 
-module.exports = router;
+    res.status(500).json({
+      error: 'Error al obtener categorías'
+    })
+  }
+})
+
+module.exports = router

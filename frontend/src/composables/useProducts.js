@@ -1,5 +1,7 @@
 import { ref } from 'vue'
 
+import { API_URL } from '@/config/api'
+
 import { useApi } from './useApi'
 
 export function useProducts() {
@@ -17,8 +19,8 @@ export function useProducts() {
   const fetchProducts = async () => {
 
     await api.request(
-      'http://localhost:3000/api/products'
-    )
+  `${API_URL}/api/products`
+)
 
     if (api.data.value) {
 
@@ -34,8 +36,8 @@ export function useProducts() {
   const fetchCategories = async () => {
 
     await api.request(
-      'http://localhost:3000/api/categories'
-    )
+  `${API_URL}/api/categories`
+)
 
     if (api.data.value) {
 
