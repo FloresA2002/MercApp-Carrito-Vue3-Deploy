@@ -134,20 +134,40 @@
       color: white;
     }
 
-    code {
-      background: #f3f4f6;
-      padding: 0.2rem 0.4rem;
-      border-radius: 6px;
-    }
+    /* Código inline, por ejemplo /api/products */
+:not(pre) > code {
+  background: #f3f4f6;
+  color: #111827;
+  padding: 0.25rem 0.45rem;
+  border-radius: 6px;
+  font-family: Consolas, Monaco, monospace;
+  font-size: 0.9rem;
+}
 
-    pre {
-      background: #111;
-      color: #d1d5db;
-      padding: 1rem;
-      border-radius: 12px;
-      overflow-x: auto;
-      margin-top: 1rem;
-    }
+/* Bloques tipo consola */
+pre {
+  background: #111;
+  color: #d1d5db;
+  padding: 1.2rem;
+  border-radius: 14px;
+  overflow-x: auto;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #2d2d2d;
+}
+
+/* Texto dentro de consola */
+pre code {
+  background: transparent;
+  color: #d1d5db;
+  padding: 0;
+  border-radius: 0;
+  font-family: Consolas, Monaco, "Courier New", monospace;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  display: block;
+}
 
     footer {
       text-align: center;
