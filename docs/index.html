@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>MercApp - Micrositio del Proyecto</title>
+
+  <style>
+    :root {
+      --primary: #10B981;
+      --primary-dark: #059669;
+      --dark: #111;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --bg: #f7f7f7;
+      --card: #ffffff;
+      --border: #e5e7eb;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, #111, #1f2937);
+      color: white;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    header p {
+      max-width: 800px;
+      margin: auto;
+      color: #d1d5db;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-bottom: 1rem;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--primary);
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-weight: bold;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 3rem 2rem;
+    }
+
+    section {
+      background: var(--card);
+      padding: 2rem;
+      border-radius: 18px;
+      margin-bottom: 2rem;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+    }
+
+    h2 {
+      margin-bottom: 1rem;
+      color: var(--dark);
+    }
+
+    ul {
+      padding-left: 1.5rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    .links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .link-card {
+      display: block;
+      padding: 1.2rem;
+      background: #f9fafb;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.3s ease;
+    }
+
+    .link-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-4px);
+    }
+
+    .link-card strong {
+      color: var(--primary);
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      overflow: hidden;
+    }
+
+    th,
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #111;
+      color: white;
+    }
+
+    code {
+      background: #f3f4f6;
+      padding: 0.2rem 0.4rem;
+      border-radius: 6px;
+    }
+
+    pre {
+      background: #111;
+      color: #d1d5db;
+      padding: 1rem;
+      border-radius: 12px;
+      overflow-x: auto;
+      margin-top: 1rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2.2rem;
+      }
+
+      section {
+        padding: 1.5rem;
+      }
+
+      table {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <span class="badge">MercApp Deploy</span>
+    <h1>MercApp</h1>
+    <p>
+      Micrositio técnico del proyecto SPA desarrollado con Vue 3,
+      API REST propia, MongoDB Atlas, Railway, Netlify y GitHub Pages.
+    </p>
+  </header>
+
+  <main>
+
+    <section>
+      <h2>Resumen técnico</h2>
+      <p>
+        MercApp es una aplicación web de una sola página desarrollada con Vue 3,
+        Composition API y Vue Router. Consume un API REST propio construido con
+        Node.js y Express. La información de productos y categorías se almacena
+        en MongoDB Atlas y el despliegue se realizó usando Railway para el backend
+        y Netlify para el frontend.
+      </p>
+    </section>
+
+    <section>
+      <h2>Arquitectura de despliegue</h2>
+
+      <ul>
+        <li><strong>Frontend:</strong> Vue 3 + Vite desplegado en Netlify.</li>
+        <li><strong>Backend:</strong> Node.js + Express desplegado en Railway.</li>
+        <li><strong>Base de datos:</strong> MongoDB Atlas.</li>
+        <li><strong>Micrositio:</strong> GitHub Pages desde la carpeta <code>/docs</code>.</li>
+        <li><strong>CORS:</strong> configurado para permitir el dominio público de Netlify.</li>
+        <li><strong>Variables de entorno:</strong> usadas para API URL y conexión MongoDB.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Enlaces del proyecto</h2>
+
+      <div class="links">
+
+        <a class="link-card" href="https://mercapp-carrito.netlify.app/" target="_blank">
+          <strong>Frontend Netlify</strong>
+          Aplicación SPA publicada.
+        </a>
+
+        <a class="link-card" href="https://dynamic-amazement-production-b864.up.railway.app" target="_blank">
+          <strong>API Railway</strong>
+          URL base del backend.
+        </a>
+
+        <a class="link-card" href="https://dynamic-amazement-production-b864.up.railway.app/health" target="_blank">
+          <strong>Health Check</strong>
+          Verificación del estado de la API.
+        </a>
+
+      </div>
+    </section>
+
+    <section>
+      <h2>Guía breve de ejecución local</h2>
+
+      <h3>Backend</h3>
+      <pre><code>cd backend
+npm install
+npm run dev</code></pre>
+
+      <h3>Frontend</h3>
+      <pre><code>cd frontend
+npm install
+npm run dev</code></pre>
+
+      <h3>Variables necesarias</h3>
+      <pre><code>Backend:
+PORT=3000
+MONGODB_URI=mongodb+srv://...
+FRONTEND_URL=http://localhost:5173
+NETLIFY_URL=https://mercapp-carrito.netlify.app
+
+Frontend:
+VITE_API_URL=https://dynamic-amazement-production-b864.up.railway.app</code></pre>
+    </section>
+
+    <section>
+      <h2>Endpoints principales</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Método</th>
+            <th>Ruta</th>
+            <th>Descripción</th>
+            <th>Ejemplo</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>GET</td>
+            <td><code>/health</code></td>
+            <td>Verifica que la API esté activa.</td>
+            <td><code>{ "status": "ok" }</code></td>
+          </tr>
+
+          <tr>
+            <td>GET</td>
+            <td><code>/api/products</code></td>
+            <td>Obtiene todos los productos.</td>
+            <td><code>[{ "name": "Laptop Gamer" }]</code></td>
+          </tr>
+
+          <tr>
+            <td>GET</td>
+            <td><code>/api/products/:id</code></td>
+            <td>Obtiene un producto por ID.</td>
+            <td><code>{ "id": "...", "name": "Mouse RGB" }</code></td>
+          </tr>
+
+          <tr>
+            <td>POST</td>
+            <td><code>/api/products</code></td>
+            <td>Crea un nuevo producto.</td>
+            <td><code>{ "name": "...", "price": 20 }</code></td>
+          </tr>
+
+          <tr>
+            <td>PUT</td>
+            <td><code>/api/products/:id</code></td>
+            <td>Actualiza un producto completo.</td>
+            <td><code>{ "name": "Producto editado" }</code></td>
+          </tr>
+
+          <tr>
+            <td>PATCH</td>
+            <td><code>/api/products/:id</code></td>
+            <td>Actualiza parcialmente un producto.</td>
+            <td><code>{ "stock": 10 }</code></td>
+          </tr>
+
+          <tr>
+            <td>DELETE</td>
+            <td><code>/api/products/:id</code></td>
+            <td>Elimina un producto.</td>
+            <td><code>{ "message": "Producto eliminado" }</code></td>
+          </tr>
+
+          <tr>
+            <td>GET</td>
+            <td><code>/api/categories</code></td>
+            <td>Obtiene todas las categorías.</td>
+            <td><code>[{ "name": "Electrónica" }]</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Funcionalidades implementadas</h2>
+
+      <ul>
+        <li>Catálogo de productos.</li>
+        <li>Búsqueda por nombre y descripción.</li>
+        <li>Filtro por categoría.</li>
+        <li>Detalle de producto por ruta dinámica.</li>
+        <li>Carrito con localStorage.</li>
+        <li>CRUD de productos.</li>
+        <li>Lazy loading y Suspense.</li>
+        <li>Consumo de API mediante variables de entorno.</li>
+        <li>Backend conectado a MongoDB Atlas.</li>
+        <li>Despliegue con HTTPS en Railway, Netlify y GitHub Pages.</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>MercApp - Proyecto académico desarrollado por Anthony Flores.</p>
+  </footer>
+
+</body>
+</html>
