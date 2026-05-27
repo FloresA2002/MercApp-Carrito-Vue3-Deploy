@@ -75,9 +75,7 @@
 
         <label>Categoría</label>
 
-        <select
-          v-model.number="form.categoryId"
-        >
+        <select v-model="form.categoryId">
 
           <option value="">
             Seleccione
@@ -298,25 +296,27 @@ const handleSubmit = async () => {
   if (!validate()) return
 
   const url = isEdit.value
-
     ? `${API_URL}/api/products/${route.params.id}`
-
     : `${API_URL}/api/products`
 
   const method = isEdit.value
     ? 'PUT'
     : 'POST'
 
-  await fetch(url, {
-
+  const response = await fetch(url, {
     method,
-
     headers: {
       'Content-Type': 'application/json'
     },
-
     body: JSON.stringify(form)
   })
+
+  const result = await response.json()
+
+  if (!response.ok) {
+    alert(result.error || 'Error al guardar producto')
+    return
+  }
 
   alert(
     isEdit.value
